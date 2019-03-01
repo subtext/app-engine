@@ -1,0 +1,22 @@
+{
+    "name": "subtext/app-factory",
+    "description": "AppFactory from Subtext Productions",
+    "type": "project",
+    "license": "GPL-3.0-only / GPL-3.0-or-later",
+    "version": "0.0.1",
+    "authors": [
+        {
+            "name": "Alonzo Turner",
+            "email": "alonzo.turner@subtextproductions.com"
+        }
+    ],
+    "require": {
+        "symfony/http-foundation": "^4.2",
+        "php-di/php-di": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Subtext\\AppFactory\\": "src/"
+        }
+    }
+}
