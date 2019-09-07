@@ -12,11 +12,17 @@
     ],
     "require": {
         "symfony/http-foundation": "^4.2",
-        "php-di/php-di": "^6.0"
+        "php-di/php-di": "^6.0",
+        "phpunit/phpunit": "^7.5",
+        "friendsofphp/php-cs-fixer": "^2.14",
+        "twig/twig": "^2.8"
     },
     "autoload": {
         "psr-4": {
             "Subtext\\AppFactory\\": "src/"
         }
+    },
+    "require-dev": {
+        "vlucas/phpdotenv": "^3.4"
     }
 }

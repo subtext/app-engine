@@ -3,7 +3,7 @@ namespace Subtext\AppFactory;
 
 try {
     $root = \realpath('..');
-    require_once($root. '/vendor/autoload.php');
+    require_once($root . '/vendor/autoload.php');
     $bootstrap = new Bootstrap($root);
     $app = $bootstrap->getApplication();
     $app->execute();
