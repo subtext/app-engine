@@ -1,4 +1,5 @@
 <?php
+
 namespace Subtext\AppFactory;
 
 use Psr\Container\ContainerInterface;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Subtext\AppFactory\Views;
 
 use Subtext\AppFactory\Base\View;

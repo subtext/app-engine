@@ -2,3 +2,4 @@
 .idea
 .env
 /src/Templates/cache/
+/.php_cs.cache

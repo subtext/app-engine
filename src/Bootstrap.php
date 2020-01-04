@@ -1,8 +1,9 @@
 <?php
+
 namespace Subtext\AppFactory;
 
-use Psr\Container\ContainerInterface;
 use DI\ContainerBuilder;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class Bootstrap

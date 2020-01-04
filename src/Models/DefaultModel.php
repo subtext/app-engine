@@ -1,4 +1,5 @@
 <?php
+
 namespace Subtext\AppFactory\Models;
 
 use Subtext\AppFactory\Base\Model;
@@ -12,5 +13,4 @@ use Subtext\AppFactory\Base\Model;
  */
 class DefaultModel extends Model
 {
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Subtext\AppFactory\Base;
 
 use Symfony\Component\HttpFoundation\Response;

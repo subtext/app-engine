@@ -1,5 +1,8 @@
 <?php
+
 namespace Subtext\AppFactory;
+
+use Throwable;
 
 /**
  * Class Fallback
@@ -11,16 +14,16 @@ namespace Subtext\AppFactory;
 class Fallback
 {
     /**
-     * @var \Throwable
+     * @var Throwable
      */
     private $error;
 
     /**
      * Fallback constructor
      *
-     * @param \Throwable $e
+     * @param Throwable $e
      */
-    public function __construct(\Throwable $e)
+    public function __construct(Throwable $e)
     {
         $this->error = $e;
     }

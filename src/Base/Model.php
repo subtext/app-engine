@@ -1,6 +1,6 @@
 <?php
-namespace Subtext\AppFactory\Base;
 
+namespace Subtext\AppFactory\Base;
 
 /**
  * Class Model
@@ -11,5 +11,4 @@ namespace Subtext\AppFactory\Base;
  */
 class Model
 {
-
 }
