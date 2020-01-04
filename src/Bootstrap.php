@@ -47,22 +47,7 @@ class Bootstrap
     {
         if (!$this->container instanceof ContainerInterface) {
             $builder = new ContainerBuilder();
-            $configFile = '';
-            switch (getenv('APP_ENV')) {
-                case 'PROD':
-                    $configFile = '/config/container.php';
-                    break;
-                case 'DEV':
-                    $configFile = '/config/developer.php';
-                    break;
-                case 'BUILD':
-                    $configFile = '/config/build.php';
-                    break;
-                case 'TEST':
-                    $configFile = '/config/unit.php';
-                    break;
-
-            }
+            $configFile = getenv('APP_CONFIG');
             $builder->addDefinitions($this->rootPath . $configFile);
             $this->container = $builder->build();
         }
@@ -77,8 +62,7 @@ class Bootstrap
     public function getApplication(): Application
     {
         if (!$this->application instanceof Application) {
-            $container = $this->getContainer();
-            $this->application = $container->get(Application::class);
+            $this->application = $this->getContainer()->get(Application::class);
         }
 
         return $this->application;

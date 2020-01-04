@@ -52,22 +52,7 @@ final class Application
 
     private function getController(): Controller
     {
-        switch (true) {
-            case $this->request->isMethod('POST'):
-                $controller = $this->container->get(ViewController::class);
-                break;
-            case $this->request->isMethod('GET'):
-                $controller = $this->container->get(ViewController::class);
-                break;
-            case $this->request->isMethod('PUT'):
-                $controller = $this->container->get(ViewController::class);
-                break;
-            case $this->request->isMethod('DELETE'):
-                $controller = $this->container->get(ViewController::class);
-                break;
-            default:
-                $controller = $this->container->get(ViewController::class);
-        }
+        $controller = $this->container->get(ViewController::class);
 
         return $controller;
     }
