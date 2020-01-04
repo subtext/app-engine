@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Subtext\\AppFactory\\": "src/"
+            "Subtext\\AppFactory\\": "src/php/"
         }
     },
     "require-dev": {

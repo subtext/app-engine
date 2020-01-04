@@ -9,8 +9,8 @@ use function DI\create;
 use function DI\factory;
 
 return [
-    'twig.template_path' => dirname(__DIR__) . '/src/Templates/twig',
-    'twig.cache_path' => dirname(__DIR__) . '/src/Templates/cache',
+    'twig.template_path' => dirname(__DIR__) . '/src/php/Templates/twig',
+    'twig.cache_path' => dirname(__DIR__) . '/src/php/Templates/cache',
     ContainerInterface::class => factory(
         function (ContainerInterface $c) {
             return $c;

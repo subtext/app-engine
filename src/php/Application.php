@@ -31,6 +31,7 @@ final class Application
      * Application constructor
      *
      * @param ContainerInterface $container
+     * @param Request $request
      */
     public function __construct(ContainerInterface $container, Request $request)
     {

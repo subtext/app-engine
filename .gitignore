@@ -1,5 +1,5 @@
 /vendor
 .idea
 .env
-/src/Templates/cache/
+/src/php/Templates/cache/
 /.php_cs.cache
