@@ -23,6 +23,7 @@
         }
     },
     "require-dev": {
-        "vlucas/phpdotenv": "^3.4"
+        "vlucas/phpdotenv": "^3.4",
+        "rexxars/html-validator": "^2.2"
     }
 }

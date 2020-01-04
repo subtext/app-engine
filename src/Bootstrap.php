@@ -3,7 +3,6 @@ namespace Subtext\AppFactory;
 
 use Psr\Container\ContainerInterface;
 use DI\ContainerBuilder;
-use Dotenv\Dotenv;
 
 /**
  * Class Bootstrap
@@ -37,7 +36,6 @@ class Bootstrap
     public function __construct(string $path)
     {
         $this->rootPath = $path;
-        (Dotenv::create($this->rootPath))->load();
     }
 
     /**
@@ -49,7 +47,7 @@ class Bootstrap
         if (!$this->container instanceof ContainerInterface) {
             $builder = new ContainerBuilder();
             $configFile = '';
-            switch ($_SERVER['APP_ENV']) {
+            switch (getenv('APP_ENV')) {
                 case 'PROD':
                     $configFile = '/config/container.php';
                     break;
@@ -64,8 +62,6 @@ class Bootstrap
                     break;
 
             }
-            printf(STDERR, $configFile);
-            die();
             $builder->addDefinitions($this->rootPath . $configFile);
             $this->container = $builder->build();
         }
