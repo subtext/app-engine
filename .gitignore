@@ -1,7 +1,8 @@
+.idea
+.env
+.php_cs.cache
 /vendor
 /node_modules
 /public/js/**/*
-.idea
-.env
-/src/php/Templates/cache/
-/.php_cs.cache
+/public/css/**/*
+/src/twig/cache/**/*

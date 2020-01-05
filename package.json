@@ -17,13 +17,18 @@
     "last 2 ios versions",
     "last 2 safari versions"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.16.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-concat": "^2.6.1",
+    "gulp-sass": "^4.0.2",
     "gulp-uglify": "^3.0.2"
   },
   "scripts": {
