@@ -7,8 +7,8 @@ use Twig\Loader\LoaderInterface;
 use Twig\Loader\FilesystemLoader;
 
 return [
-    'twig.template_path' => dirname(__DIR__) . '/src/php/Templates/twig',
-    'twig.cache_path' => dirname(__DIR__) . '/src/php/Templates/cache',
+    'twig.template_path' => dirname(__DIR__) . '/src/twig/templates',
+    'twig.cache_path' => dirname(__DIR__) . '/src/twig/cache',
     ContainerInterface::class => DI\factory(
         function (ContainerInterface $c) {
             return $c;

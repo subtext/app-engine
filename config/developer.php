@@ -9,18 +9,23 @@ use function DI\create;
 use function DI\factory;
 
 return [
-    'twig.template_path' => dirname(__DIR__) . '/src/php/Templates/twig',
-    'twig.cache_path' => dirname(__DIR__) . '/src/php/Templates/cache',
+    'twig.template_path' => dirname(__DIR__) . '/src/twig/templates',
+    'twig.cache_path' => false,
     ContainerInterface::class => factory(
         function (ContainerInterface $c) {
             return $c;
         }
     ),
     Request::class => factory([Request::class, 'createFromGlobals']),
-    LoaderInterface::class => create(FilesystemLoader::class)->constructor(DI\get('twig.template_path')),
+    LoaderInterface::class => create(FilesystemLoader::class)
+        ->constructor(DI\get('twig.template_path')),
     Environment::class => factory(
         function (ContainerInterface $c) {
-            return new Environment($c->get(LoaderInterface::class), ['cache' => $c->get('twig.cache_path')]);
+
+            return new Environment(
+                $c->get(LoaderInterface::class),
+                ['cache' => $c->get('twig.cache_path')]
+            );
         }
     )
 ];
