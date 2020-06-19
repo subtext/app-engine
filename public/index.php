@@ -2,9 +2,8 @@
 namespace Subtext\AppFactory;
 
 try {
-    $root = \realpath('..');
-    require_once($root . '/vendor/autoload.php');
-    $bootstrap = new Bootstrap($root);
+    require_once(__DIR__ . '/vendor/autoload.php');
+    $bootstrap = new Bootstrap(__DIR__);
     $app = $bootstrap->getApplication();
     $app->execute();
 } catch (\Throwable $e) {
