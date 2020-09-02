@@ -15,7 +15,8 @@
         "php-di/php-di": "^6.0",
         "phpunit/phpunit": "^7.5",
         "friendsofphp/php-cs-fixer": "^2.14",
-        "twig/twig": "^2.8"
+        "twig/twig": "^2.8",
+        "aws/aws-sdk-php": "^3.132"
     },
     "autoload": {
         "psr-4": {

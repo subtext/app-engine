@@ -2,6 +2,8 @@
 
 namespace Subtext\AppFactory\Base;
 
+use Aws\SecretsManager\SecretsManagerClient;
+
 /**
  * Class Model
  *
@@ -11,4 +13,11 @@ namespace Subtext\AppFactory\Base;
  */
 class Model
 {
+    private $secrets;
+
+    public function __construct()
+    {
+        $this->secrets = new SecretsManagerClient([]);
+    }
+
 }
