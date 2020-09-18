@@ -29,7 +29,7 @@ return [
 
             return new Environment(
                 $c->get(LoaderInterface::class),
-                ['cache' => $c->get('twig.cache_path')]
+                ['cache' => $c->get('twig.cache_path'), 'debug' => true]
             );
         }
     )

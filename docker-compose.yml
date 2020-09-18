@@ -7,7 +7,7 @@ services:
     environment:
       VIRTUAL_HOST: app-factory.subtext
       VIRTUAL_ADMIN: alonzo.turner@subtextproductions.com
-
+      APP_CONFIG: developer.php
     volumes:
     - ./:/var/www
     ports:
