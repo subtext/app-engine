@@ -3,10 +3,10 @@
 namespace Subtext\AppFactory;
 
 use Psr\Container\ContainerInterface;
-use Subtext\AppFactory\Base\Controller;
-use Subtext\AppFactory\Controllers\ViewController;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
-use Throwable;
+use Symfony\Component\Routing\Router;
+use \Throwable;
 
 /**
  * Class Application
@@ -28,33 +28,46 @@ final class Application
     private $request;
 
     /**
+     * @var Router
+     */
+    private $router;
+
+    /**
      * Application constructor
      *
      * @param ContainerInterface $container
-     * @param Request $request
+     * @param Request            $request
+     * @param Router             $router
      */
-    public function __construct(ContainerInterface $container, Request $request)
+    public function __construct(ContainerInterface $container, Request $request, Router $router)
     {
         $this->container = $container;
         $this->request = $request;
+        $this->router = $router;
     }
 
     public function execute(): void
     {
         try {
-            $controller = $this->getController();
+            if (mb_substr($this->request->getUri(), -1) === '/') {
+                $uri = rtrim($this->request->getRequestUri(), "/");
+                $params = $this->router->match($uri);
+            } else {
+                $params = $this->router->matchRequest($this->request);
+            }
+            if (!$this->container->has($params['_controller'])) {
+                throw new ResourceNotFoundException("Controller does not exist");
+            }
+            $controller = $this->container->get($params['_controller']);
             $response = $controller->execute();
             $response->send();
-        } catch (Throwable $error) {
-            $retreat = new Fallback($error);
-            $retreat->failGracefully();
+        } catch (Throwable $e) {
+            throw new RuntimeException("Oops... there was a problem", 404, $e);
         }
     }
 
-    private function getController(): Controller
+    public function close(): void
     {
-        $controller = $this->container->get(ViewController::class);
-
-        return $controller;
+        // send any errors to bugsnag
     }
 }

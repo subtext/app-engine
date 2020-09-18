@@ -1,4 +1,9 @@
 <?php
+/**
+ * @package Subtext\AppFactory
+ * @copyright Subtext Productions 2007-2020 All rights reserved
+ * @license GPL-3.0-only or GPL-3.0-or-later
+ */
 
 namespace Subtext\AppFactory\Base;
 
@@ -11,12 +16,7 @@ use Aws\SecretsManager\SecretsManagerClient;
  * @copyright Subtext Productions 2007-2020 All rights reserved
  * @license GPL-3.0-only or GPL-3.0-or-later
  */
-class Model
+abstract class Model
 {
-    private $secrets;
-
-    public function __construct()
-    {
-        $this->secrets = new SecretsManagerClient(['region' => 'us-west-2', 'version' => 'latest']);
-    }
+    abstract public function getData(): array;
 }

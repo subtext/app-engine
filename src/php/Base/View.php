@@ -21,5 +21,9 @@ abstract class View
         $this->twig = $twig;
     }
 
-    abstract public function display(): Response;
+    /**
+     * @param array $data
+     * @return Response
+     */
+    abstract public function display(array $data): Response;
 }

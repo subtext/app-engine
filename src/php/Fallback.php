@@ -2,6 +2,7 @@
 
 namespace Subtext\AppFactory;
 
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -33,6 +34,14 @@ class Fallback
      */
     public function failGracefully(): void
     {
-        echo $this->error->getMessage();
+        if (headers_sent()) {
+            die($this->error->getMessage());
+        } else {
+            $html = "<div><h1>" . $this->error->getPrevious()->getMessage() . "</h1><pre>" . $this->error->getTraceAsString() . "</pre></div>";
+
+            $response = new Response($html);
+            $response->send();
+            exit(16);
+        }
     }
 }

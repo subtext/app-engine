@@ -9,27 +9,23 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 /**
- * Class DefaultView
+ * Class BasicView
  *
- * @package Subtext\AppFactory\Views
+ * @package Subtext\AppFactory
  * @copyright Subtext Productions 2007-2020 All rights reserved
  * @license GPL-3.0-only or GPL-3.0-or-later
  */
-class DefaultView extends View
+class BasicView extends View
 {
     /**
+     * @param array $data
      * @return Response
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function display(): Response
+    public function display(array $data): Response
     {
-        $response = new Response($this->twig->render(
-            'index.twig',
-            ['content' => 'Hello, World!']
-        ));
-
-        return $response;
+        return new Response($this->twig->render('index.twig', $data));
     }
 }

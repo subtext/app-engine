@@ -3,6 +3,8 @@
 namespace Subtext\AppFactory;
 
 use DI\ContainerBuilder;
+use Exception;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -57,8 +59,8 @@ class Bootstrap
     {
         if (!$this->container instanceof ContainerInterface) {
             $configFile = getenv('APP_CONFIG') ? getenv('APP_CONFIG') : 'production.php';
-            if (empty($configFile)) {
-                throw new InvalidArgumentException('The variable APP_CONFIG must be set and valid');
+            if (!file_exists($this->configPath . $configFile)) {
+                throw new InvalidArgumentException('The variable APP_CONFIG must be set and valid; file not found');
             }
             $builder = new ContainerBuilder();
             $builder->addDefinitions($this->configPath . $configFile);
@@ -70,7 +72,7 @@ class Bootstrap
 
     /**
      * @return Application
-     * @throws \Exception
+     * @throws Exception
      */
     public function getApplication(): Application
     {

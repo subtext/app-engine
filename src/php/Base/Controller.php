@@ -13,5 +13,20 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class Controller
 {
+    /**
+     * @var Model
+     */
+    protected $model;
+
+    /**
+     * @var View
+     */
+    protected $view;
+
+    /**
+     * Create a method which will handle all the necessary tasks for this controller
+     *
+     * @return Response
+     */
     abstract public function execute(): Response;
 }

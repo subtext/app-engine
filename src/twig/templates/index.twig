@@ -6,48 +6,31 @@
         <title>App-Factory</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light">
-            <a class="navbar-brand" href="/"></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navHidden" aria-controls="navHidden" aria-expanded="false" aria-label="Toggle Navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navHidden">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Alpha</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Beta</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Gamma</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Delta</a>
-                    </li>
-
-                </ul>
-            </div>
-        </nav>
         <div class="container">
-            <div class="row">
-                <div class="col">
-                    <h1 class="display-1">{{ content }}</h1>
+            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                <a class="navbar-brand" href="/">Subtext</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navHidden" aria-controls="navHidden" aria-expanded="false" aria-label="Toggle Navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navHidden">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/alpha">Alpha</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/beta">Beta</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/gamma">Gamma</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/delta">Delta</a>
+                        </li>
+
+                    </ul>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div>
-                        <p>something</p>
-                    </div>
-                </div>
-                <div class="col">
-                    <p>something</p>
-                </div>
-                <div class="col">
-                    <p>something</p>
-                </div>
-            </div>
+            </nav>
+            {% include content %}
         </div>
         <script src="/js/jquery.min.js"></script>
         <script src="/js/popper.min.js"></script>
