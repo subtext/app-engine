@@ -34,14 +34,54 @@ class Fallback
      */
     public function failGracefully(): void
     {
-        if (headers_sent()) {
-            die($this->error->getMessage());
-        } else {
-            $html = "<div><h1>" . $this->error->getPrevious()->getMessage() . "</h1><pre>" . $this->error->getTraceAsString() . "</pre></div>";
+        $errorPage = <<<EOF
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/css/style.css" />
+        <title>App-Factory</title>
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-expand-sm navbar-light bg-light">
+                <a class="navbar-brand" href="/">Subtext</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navHidden" aria-controls="navHidden" aria-expanded="false" aria-label="Toggle Navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navHidden">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/alpha">Alpha</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/beta">Beta</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/gamma">Gamma</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/delta">Delta</a>
+                        </li>
 
-            $response = new Response($html);
-            $response->send();
-            exit(16);
-        }
+                    </ul>
+                </div>
+            </nav>
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-1 text-center mt-5">{$this->error->getMessage()}</h1>
+                </div>
+            </div>
+        </div>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/popper.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/index.min.js"></script>
+    </body>
+</html>
+EOF;
+        $response = new Response($errorPage, $this->error->getCode());
+        $response->send();
+        exit(16);
     }
 }

@@ -16,4 +16,5 @@ try {
 } catch (\Throwable $e) {
     $error = new Fallback($e);
     $error->failGracefully();
+    $app->close();
 }
