@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  php:
+    build:
+      context: docker/.
+    environment:
+      VIRTUAL_HOST: app-factory.subtext
+      VIRTUAL_ADMIN: alonzo.turner@subtextproductions.com
+
+    volumes:
+    - ./:/var/www
+    ports:
+    - 80:80
+    - 443:443
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root-webapp
+      MYSQL_DATABASE: webapp
+      MYSQL_USER: webapp
+      MYSQL_PASSWORD: webapp-password
