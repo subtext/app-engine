@@ -17,7 +17,6 @@ class Model
 
     public function __construct()
     {
-        $this->secrets = new SecretsManagerClient([]);
+        $this->secrets = new SecretsManagerClient(['region' => 'us-west-2', 'version' => 'latest']);
     }
-
 }

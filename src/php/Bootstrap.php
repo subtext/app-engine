@@ -30,25 +30,38 @@ class Bootstrap
     private $rootPath;
 
     /**
+     * @var string The path to di configs and site routes
+     */
+    private $configPath;
+
+    /**
      * Bootstrap constructor
      *
      * @param string $path
      */
     public function __construct(string $path)
     {
-        $this->rootPath = $path;
+        if (!empty($path)) {
+            $this->rootPath = rtrim($path, '/') . '/';
+        } else {
+            $this->rootPath = dirname(__DIR__, 2) . '/';
+        }
+        $this->configPath = $this->rootPath . 'config/';
     }
 
     /**
      * @return ContainerInterface
-     * @throws \Exception
+     * @throws Exception
      */
     public function getContainer(): ContainerInterface
     {
         if (!$this->container instanceof ContainerInterface) {
+            $configFile = getenv('APP_CONFIG') ? getenv('APP_CONFIG') : 'production.php';
+            if (empty($configFile)) {
+                throw new InvalidArgumentException('The variable APP_CONFIG must be set and valid');
+            }
             $builder = new ContainerBuilder();
-            $configFile = getenv('APP_CONFIG');
-            $builder->addDefinitions($this->rootPath . $configFile);
+            $builder->addDefinitions($this->configPath . $configFile);
             $this->container = $builder->build();
         }
 
