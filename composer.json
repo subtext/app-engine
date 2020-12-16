@@ -27,6 +27,7 @@
     },
     "require-dev": {
         "vlucas/phpdotenv": "^3.4",
-        "rexxars/html-validator": "^2.2"
+        "rexxars/html-validator": "^2.2",
+        "doctrine/migrations": "^3.0"
     }
 }

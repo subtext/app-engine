@@ -3,20 +3,34 @@ version: '3.7'
 services:
   php:
     image: alonzoturner/lamp-stack:framework
+    container_name: php-factory
     environment:
       VIRTUAL_HOST: app-factory.subtext
       VIRTUAL_ADMIN: alonzo.turner@subtextproductions.com
       VIRTUAL_DIR: public
       APP_CONFIG: developer.php
+      APP_DB_HOST: db
+      APP_DB_USER: webapp
+      APP_DB_PASS: webapp-password
+      APP_DB_NAME: webapp
     volumes:
     - ./:/var/www
     ports:
     - 80:80
     - 443:443
+  mailhog:
+    image: mailhog/mailhog
+    container_name: php-mailhog
+    ports:
+    - 1025:1025
+    - 8025:8025
   db:
     image: mysql:5.7
+    container_name: mysql-factory
     environment:
       MYSQL_ROOT_PASSWORD: root-webapp
       MYSQL_DATABASE: webapp
       MYSQL_USER: webapp
       MYSQL_PASSWORD: webapp-password
+    volumes:
+      - ./database/data:/var/lib/mysql

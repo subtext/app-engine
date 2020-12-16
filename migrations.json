@@ -1,0 +1,13 @@
+{
+    "table_storage": {
+        "table_name": "migrations",
+        "version_column_name": "migration_version",
+        "version_column_length": 512,
+        "executed_at_column_name": "migration_date",
+        "execution_time_column_name": "migration_time"
+    },
+    "migrations_paths": {
+        "Subtext\\AppFactory\\Migrations": "database/migrations"
+    },
+    "organize_migrations": "year_and_month"
+}
