@@ -5,7 +5,9 @@
  * @license GPL-3.0-only or GPL-3.0-or-later
  */
 
+use Monolog\Logger;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Loader\PhpFileLoader;
@@ -25,8 +27,14 @@ return [
             return $c;
         }
     ),
+    LoggerInterface::class => factory(function(ContainerInterface $c) {
+        $logger = new Logger('debug');
+        $logger->pushHandler(new Monolog\Handler\FingersCrossedHandler(Logger::DEBUG));
+
+        return $logger;
+    }),
     Request::class => factory([Request::class, 'createFromGlobals']),
-    RequestContext::class => DI\factory(
+    RequestContext::class => factory(
         function (ContainerInterface $c) {
             $context = new RequestContext();
             $context->fromRequest($c->get(Request::class));
@@ -34,7 +42,7 @@ return [
             return $context;
         }
     ),
-    Router::class => DI\factory(
+    Router::class => factory(
         function (ContainerInterface $c) {
             $locator = new FileLocator([dirname(__DIR__)]);
             $loader = new PhpFileLoader($locator);
