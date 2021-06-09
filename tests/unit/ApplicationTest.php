@@ -22,7 +22,6 @@ use Throwable;
 class ApplicationTest extends TestCase
 {
     /**
-     * @throws \Exception
      * @covers ::__construct
      * @covers ::execute
      */

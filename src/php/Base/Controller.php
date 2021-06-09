@@ -28,5 +28,9 @@ abstract class Controller
      *
      * @return Response
      */
-    abstract public function execute(): Response;
+    public function execute(): Response
+    {
+        $data = $this->model->getData();
+        return $this->view->display($data);
+    }
 }
