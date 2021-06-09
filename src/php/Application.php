@@ -2,11 +2,13 @@
 
 namespace Subtext\AppFactory;
 
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Router;
-use \Throwable;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Throwable;
 
 /**
  * Class Application
@@ -50,11 +52,11 @@ final class Application
     {
         try {
             if (mb_substr($this->request->getUri(), -1) === '/') {
-                $uri = rtrim($this->request->getRequestUri(), "/");
-                $params = $this->router->match($uri);
-            } else {
-                $params = $this->router->matchRequest($this->request);
+                throw new InvalidArgumentException(
+                    "The request uri contains a trailing slash. Please remove this at the web server level"
+                );
             }
+            $params = $this->router->matchRequest($this->request);
             if (!$this->container->has($params['_controller'])) {
                 throw new ResourceNotFoundException("Controller does not exist");
             }
@@ -66,8 +68,11 @@ final class Application
         }
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function close(): void
     {
-        // send any errors to bugsnag
+        // send any errors to logs
     }
 }

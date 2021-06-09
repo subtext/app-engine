@@ -12,14 +12,17 @@ use PHPUnit\Framework\TestCase;
  */
 class FallbackTest extends TestCase
 {
+    /**
+     * @covers \Subtext\AppFactory\Fallback
+     */
     public function testFailGracefully(): void
     {
         $expected = 'Goodbye cruel world!';
-        $throwable = new \Exception($expected);
+        $throwable = new \Exception($expected, 500);
         $fallback = new Fallback($throwable);
         ob_start();
         $fallback->failGracefully();
         $actual = ob_get_clean();
-        $this->assertEquals($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 }

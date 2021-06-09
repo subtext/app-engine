@@ -82,6 +82,5 @@ class Fallback
 EOF;
         $response = new Response($errorPage, $this->error->getCode());
         $response->send();
-        exit(16);
     }
 }

@@ -59,9 +59,13 @@ class Bootstrap
     {
         if (!$this->container instanceof ContainerInterface) {
             $configFile = getenv('APP_CONFIG') ? getenv('APP_CONFIG') : 'production.php';
+            // @codeCoverageIgnoreStart
             if (!file_exists($this->configPath . $configFile)) {
-                throw new InvalidArgumentException('The variable APP_CONFIG must be set and valid; file not found');
+                throw new InvalidArgumentException(
+                    "The variable APP_CONFIG=$configFile must be set and valid; file not found"
+                );
             }
+            // @codeCoverageIgnoreEnd
             $builder = new ContainerBuilder();
             $builder->addDefinitions($this->configPath . $configFile);
             $this->container = $builder->build();

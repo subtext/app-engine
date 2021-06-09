@@ -14,30 +14,35 @@ use Psr\Container\ContainerInterface;
  */
 class BootstrapTest extends TestCase
 {
-
     /**
      * @throws \Exception
      * @covers ::__construct
-     * @covers ::getApplication
-     */
-    public function testGetApplication()
-    {
-        $rootPath = dirname(__DIR__, 2);
-        $bootstrap = new Bootstrap($rootPath);
-        $app = $bootstrap->getApplication();
-        $this->assertInstanceOf(Application::class, $app);
-    }
-
-    /**
-     * @throws \Exception
-     * @covers ::_construct
      * @covers ::getContainer
      */
     public function testGetContainer()
     {
-        $rootPath = realpath('../..');
+        $rootPath = dirname(__DIR__, 2);
         $bootstrap = new Bootstrap($rootPath);
         $container = $bootstrap->getContainer();
         $this->assertInstanceOf(ContainerInterface::class, $container);
+        try {
+
+        } catch (\Throwable $e) {
+            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        }
+    }
+
+    /**
+     * @throws \Exception
+     * @covers ::__construct
+     * @covers ::getContainer
+     * @covers ::getApplication
+     * @covers \Subtext\AppFactory\Application::__construct
+     */
+    public function testGetApplication()
+    {
+        $bootstrap = new Bootstrap('');
+        $app = $bootstrap->getApplication();
+        $this->assertInstanceOf(Application::class, $app);
     }
 }

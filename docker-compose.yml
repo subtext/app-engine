@@ -8,6 +8,7 @@ services:
       VIRTUAL_HOST: app-factory.subtext
       VIRTUAL_ADMIN: alonzo.turner@subtextproductions.com
       VIRTUAL_DIR: public
+      PHP_IDE_CONFIG: serverName=AppFactory
       APP_CONFIG: developer.php
       APP_DB_HOST: db
       APP_DB_USER: webapp
