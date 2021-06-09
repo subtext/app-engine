@@ -11,7 +11,6 @@ namespace Subtext\AppFactory\Models;
  */
 class BetaModel extends \Subtext\AppFactory\Base\Model
 {
-
     public function getData(): array
     {
         return ['content' => 'zodiac.twig', 'image' => ['src' => '/images/pig.jpg', 'alt' => 'Pig']];

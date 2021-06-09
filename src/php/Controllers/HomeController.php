@@ -2,8 +2,8 @@
 
 namespace Subtext\AppFactory\Controllers;
 
-use Subtext\AppFactory\Views\BasicView;
 use Subtext\AppFactory\Models\HomeModel;
+use Subtext\AppFactory\Views\BasicView;
 
 /**
  * Class HomeController
@@ -14,7 +14,6 @@ use Subtext\AppFactory\Models\HomeModel;
  */
 class HomeController extends BasicController
 {
-
     public function __construct(HomeModel $model, BasicView $view)
     {
         $this->model = $model;
