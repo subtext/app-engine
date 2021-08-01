@@ -1,14 +1,14 @@
 <?php
 
-namespace Subtext\AppFactory\Base;
+namespace Subtext\AppEngine\Base;
 
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Controller
  *
- * @package Subtext\AppFactory\Base
- * @copyright Subtext Productions 2007-2020 All rights reserved
+ * @package Subtext\AppEngine\Base
+ * @copyright Subtext Productions 2007-2021 All rights reserved
  * @license GPL-3.0-only or GPL-3.0-or-later
  */
 abstract class Controller

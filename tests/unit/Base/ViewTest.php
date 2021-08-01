@@ -1,12 +1,12 @@
 <?php
-namespace Subtext\AppFactory\Base;
+namespace Subtext\AppEngine\Base;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 /**
- * @coversDefaultClass \Subtext\AppFactory\Base\View
+ * @coversDefaultClass \Subtext\AppEngine\Base\View
  */
 class ViewTest extends TestCase
 {

@@ -1,10 +1,10 @@
 <?php
-namespace Subtext\AppFactory;
+namespace Subtext\AppEngine;
 
 use DI\Container;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Subtext\AppFactory\Base\Controller;
+use Subtext\AppEngine\Base\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Router;
@@ -14,10 +14,10 @@ use Throwable;
 /**
  * Class ApplicationTest
  *
- * @package Subtext\AppFactory
- * @copyright Subtext Productions 2007-2020 All rights reserved
+ * @package Subtext\AppEngine
+ * @copyright Subtext Productions 2007-2021 All rights reserved
  * @license GPL-3.0-only or GPL-3.0-or-later
- * @coversDefaultClass \Subtext\AppFactory\Application
+ * @coversDefaultClass \Subtext\AppEngine\Application
  */
 class ApplicationTest extends TestCase
 {

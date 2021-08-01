@@ -1,5 +1,5 @@
 <?php
-namespace Subtext\AppFactory\Base;
+namespace Subtext\AppEngine\Base;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class ControllerTest
  *
- * @package Subtext\AppFactory\Base
- * @coversDefaultClass \Subtext\AppFactory\Base\Controller
+ * @package Subtext\AppEngine\Base
+ * @coversDefaultClass \Subtext\AppEngine\Base\Controller
  */
 class ControllerTest extends TestCase
 {

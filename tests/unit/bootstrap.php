@@ -1,5 +1,5 @@
 <?php
-namespace Subtext\AppFactory;
+namespace Subtext\AppEngine;
 
 use Dotenv\Dotenv;
 

@@ -1,19 +1,19 @@
 <?php
-namespace Subtext\AppFactory;
+namespace Subtext\AppEngine;
 
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class FallbackTest
  *
- * @package Subtext\AppFactory
- * @copyright Subtext Productions 2007-2020 All rights reserved
+ * @package Subtext\AppEngine
+ * @copyright Subtext Productions 2007-2021 All rights reserved
  * @license GPL-3.0-only or GPL-3.0-or-later
  */
 class FallbackTest extends TestCase
 {
     /**
-     * @covers \Subtext\AppFactory\Fallback
+     * @covers \Subtext\AppEngine\Fallback
      */
     public function testFailGracefully(): void
     {

@@ -5,8 +5,3 @@
 .phpunit.cache
 .phpunit.result.cache
 /vendor
-/node_modules
-/database/data
-/public/js/**/*
-/public/css/**/*
-/src/twig/cache/**/*

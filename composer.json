@@ -1,12 +1,12 @@
 {
-    "name": "subtext/app-factory",
-    "description": "AppFactory from Subtext Productions",
-    "type": "project",
-    "license": "GPL-3.0-only / GPL-3.0-or-later",
+    "name": "subtext/app-engine",
+    "description": "Common code for bootstrapping a PHP web application",
+    "type": "library",
+    "license": "MIT",
     "version": "0.0.1",
     "authors": [
         {
-            "name": "Alonzo Turner",
+            "name": "Alonzo C Turner",
             "email": "alonzo.turner@subtextproductions.com"
         }
     ],
@@ -14,22 +14,19 @@
         "symfony/http-foundation": "^5.0",
         "symfony/config": "^5.0",
         "php-di/php-di": "^6.0",
-        "twig/twig": "^2.8",
-        "aws/aws-sdk-php": "^3.132",
         "symfony/routing": "^5.0",
         "monolog/monolog": "^2.2",
         "psr/log": "^1.1"
     },
     "autoload": {
         "psr-4": {
-            "Subtext\\AppFactory\\": "src/php/"
+            "Subtext\\AppEngine\\": "src/"
         }
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
         "friendsofphp/php-cs-fixer": "^2.14",
         "vlucas/phpdotenv": "^3.4",
-        "rexxars/html-validator": "^2.2",
-        "doctrine/migrations": "^3.0"
+        "rexxars/html-validator": "^2.2"
     }
 }

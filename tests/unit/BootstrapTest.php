@@ -1,5 +1,5 @@
 <?php
-namespace Subtext\AppFactory;
+namespace Subtext\AppEngine;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -7,10 +7,10 @@ use Psr\Container\ContainerInterface;
 /**
  * Class BootstrapTest
  *
- * @package Subtext\AppFactory
- * @copyright Subtext Productions 2007-2020 All rights reserved
+ * @package Subtext\AppEngine
+ * @copyright Subtext Productions 2007-2021 All rights reserved
  * @license GPL-3.0-only or GPL-3.0-or-later
- * @coversDefaultClass \Subtext\AppFactory\Bootstrap
+ * @coversDefaultClass \Subtext\AppEngine\Bootstrap
  */
 class BootstrapTest extends TestCase
 {
@@ -37,7 +37,7 @@ class BootstrapTest extends TestCase
      * @covers ::__construct
      * @covers ::getContainer
      * @covers ::getApplication
-     * @covers \Subtext\AppFactory\Application::__construct
+     * @covers \Subtext\AppEngine\Application::__construct
      */
     public function testGetApplication()
     {
