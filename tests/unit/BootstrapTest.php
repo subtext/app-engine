@@ -1,6 +1,7 @@
 <?php
 namespace Subtext\AppEngine;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -15,7 +16,7 @@ use Psr\Container\ContainerInterface;
 class BootstrapTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      * @covers ::__construct
      * @covers ::getContainer
      */
@@ -25,15 +26,10 @@ class BootstrapTest extends TestCase
         $bootstrap = new Bootstrap($rootPath);
         $container = $bootstrap->getContainer();
         $this->assertInstanceOf(ContainerInterface::class, $container);
-        try {
-
-        } catch (\Throwable $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
-        }
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      * @covers ::__construct
      * @covers ::getContainer
      * @covers ::getApplication
@@ -41,7 +37,8 @@ class BootstrapTest extends TestCase
      */
     public function testGetApplication()
     {
-        $bootstrap = new Bootstrap('');
+        $rootPath = dirname(__DIR__, 2);
+        $bootstrap = new Bootstrap($rootPath);
         $app = $bootstrap->getApplication();
         $this->assertInstanceOf(Application::class, $app);
     }

@@ -1,6 +1,7 @@
 .idea
+.vscode
 .env
-.php_cs
+.php-cs-fixer.php
 .php_cs.cache
 .phpunit.cache
 .phpunit.result.cache

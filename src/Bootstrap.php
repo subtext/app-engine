@@ -43,12 +43,8 @@ class Bootstrap
      */
     public function __construct(string $path)
     {
-        if (!empty($path)) {
-            $this->rootPath = rtrim($path, '/') . '/';
-        } else {
-            $this->rootPath = dirname(__DIR__, 2) . 'Bootstrap.php/';
-        }
-        $this->configPath = $this->rootPath . 'config/';
+        $this->rootPath = $this->resolveProjectLocation($path);
+        $this->configPath = "$this->rootPath/config";
     }
 
     /**
@@ -59,15 +55,16 @@ class Bootstrap
     {
         if (!$this->container instanceof ContainerInterface) {
             $configFile = getenv('APP_CONFIG') ? getenv('APP_CONFIG') : 'production.php';
+            $configPath = "$this->configPath/$configFile";
             // @codeCoverageIgnoreStart
-            if (!file_exists($this->configPath . $configFile)) {
+            if (!file_exists($configPath)) {
                 throw new InvalidArgumentException(
                     "The variable APP_CONFIG=$configFile must be set and valid; file not found"
                 );
             }
             // @codeCoverageIgnoreEnd
             $builder = new ContainerBuilder();
-            $builder->addDefinitions($this->configPath . $configFile);
+            $builder->addDefinitions($configPath);
             $this->container = $builder->build();
         }
 
@@ -85,5 +82,27 @@ class Bootstrap
         }
 
         return $this->application;
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     * @throws InvalidArgumentException
+     */
+    private function resolveProjectLocation(string $path): string
+    {
+        if (empty($path) || !is_dir($path)) {
+            throw new InvalidArgumentException(
+                'The path provided to Bootstrap is not a valid directory'
+            );
+        }
+        $directory = rtrim($path, '/');
+        if (!is_dir($directory . '/config')) {
+            throw new InvalidArgumentException(
+                'The path provided to Bootstrap does not contain a valid config directory'
+            );
+        }
+
+        return $directory;
     }
 }

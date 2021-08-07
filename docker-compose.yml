@@ -3,7 +3,7 @@ version: '3.7'
 services:
   php:
     image: alonzoturner/lamp-stack:framework
-    container_name: php-factory
+    container_name: php-engine
     environment:
       VIRTUAL_DIR: public
       VIRTUAL_HOST: app-engine.subtext
