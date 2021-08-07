@@ -3,7 +3,6 @@ namespace Subtext\AppEngine\Base;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
 /**
  * @coversDefaultClass \Subtext\AppEngine\Base\View
@@ -16,8 +15,7 @@ class ViewTest extends TestCase
      */
     public function testThatDisplayReturnsAResponse(): void
     {
-        $twig = $this->createMock(Environment::class);
-        $unit = new class($twig) extends View {
+        $unit = new class() extends View {
             public function display(array $data): Response
             {
                 return new Response('Hello World');

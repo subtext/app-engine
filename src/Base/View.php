@@ -14,13 +14,6 @@ use Twig\Environment;
  */
 abstract class View
 {
-    protected $twig;
-
-    public function __construct(Environment $twig)
-    {
-        $this->twig = $twig;
-    }
-
     /**
      * @param array $data
      * @return Response
