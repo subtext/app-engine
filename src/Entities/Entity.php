@@ -54,7 +54,9 @@ SQL;
         foreach ($data as $token => $value) {
             if (isset(static::COLUMN_MAP[$token])) {
                 $columnName = static::COLUMN_MAP[$token];
-                array_push($conditions, "`$columnName` = $token");
+                if ($columnName != $key) {
+                    array_push($conditions, "`$columnName` = $token");
+                }
             }
         }
         $sql = <<<SQL

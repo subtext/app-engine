@@ -7,6 +7,7 @@ use Subtext\AppEngine\Services\Database;
 abstract class Collection extends \ArrayObject
 {
     private $db;
+    private $errors = [];
 
     public function __construct(Database $db)
     {
@@ -51,16 +52,33 @@ abstract class Collection extends \ArrayObject
         $sql = $className::getUpdateQuery($data);
         $id = $entity->getId();
         if ($this->offsetExists($id)) {
-            unset($entity[$id]);
+            $this->offsetSet($id, $entity);
         }
-        $this->db->getRowsAffectedForUpdate();
+        $result = $this->db->getRowsAffectedForUpdate($sql, $data);
+        if ($result === 0) {
+            if (!empty($errors = $this->db->getErrors())) {
+                array_push($this->errors, ...$errors);
+            }
+        }
 
-        return false;
+        return $result;
     }
 
     public function deleteEntity(int $id): bool
     {
-        return false;
+        $className = $this->getClassName();
+        $sql = $className::getDeleteQuery();
+        if (!$result = $this->db->execute($sql, [':id' => $id])) {
+            $errors = $this->db->getErrors();
+            array_push($this->errors, ...$errors);
+        }
+
+        return $result;
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 
     abstract protected function getClassName(): string;
