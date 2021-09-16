@@ -23,6 +23,12 @@ abstract class Controller
      */
     protected $view;
 
+    public function __construct(Model $model, View $view)
+    {
+        $this->model = $model;
+        $this->view = $view;
+    }
+
     /**
      * Create a method which will handle all the necessary tasks for this controller
      *

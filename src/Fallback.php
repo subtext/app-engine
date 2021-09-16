@@ -44,29 +44,6 @@ class Fallback
     </head>
     <body>
         <div class="container">
-            <nav class="navbar navbar-expand-sm navbar-light bg-light">
-                <a class="navbar-brand" href="/">Subtext</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navHidden" aria-controls="navHidden" aria-expanded="false" aria-label="Toggle Navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navHidden">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/alpha">Alpha</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/beta">Beta</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/gamma">Gamma</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/delta">Delta</a>
-                        </li>
-
-                    </ul>
-                </div>
-            </nav>
             <div class="row">
                 <div class="col">
                     <h1 class="display-1 text-center mt-5">{$this->error->getMessage()}</h1>

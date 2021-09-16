@@ -41,8 +41,11 @@ final class Application
      * @param Request            $request
      * @param Router             $router
      */
-    public function __construct(ContainerInterface $container, Request $request, Router $router)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        Request $request,
+        Router $router
+    ) {
         $this->container = $container;
         $this->request = $request;
         $this->router = $router;
@@ -51,11 +54,7 @@ final class Application
     public function execute(): void
     {
         try {
-            if (mb_substr($this->request->getUri(), -1) === '/') {
-                throw new InvalidArgumentException(
-                    "The request uri contains a trailing slash. Please remove this at the web server level"
-                );
-            }
+            $this->validateRequestUri();
             $params = $this->router->matchRequest($this->request);
             if (!$this->container->has($params['_controller'])) {
                 throw new ResourceNotFoundException("Controller does not exist");
@@ -74,5 +73,18 @@ final class Application
     public function close(): void
     {
         // send any errors to logs
+    }
+
+    private function validateRequestUri(): void
+    {
+        $uri = $this->request->getUri();
+        $ruri = $this->request->getRequestUri();
+        if ($uri === 'http://localhost/') {
+            // do nothing
+        } elseif (mb_substr($this->request->getUri(), -1) === '/') {
+            throw new InvalidArgumentException(
+                "The request uri contains a trailing slash. Please remove this at the web server level"
+            );
+        }
     }
 }

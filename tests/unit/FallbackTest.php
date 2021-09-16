@@ -1,6 +1,7 @@
 <?php
 namespace Subtext\AppEngine;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,7 +19,7 @@ class FallbackTest extends TestCase
     public function testFailGracefully(): void
     {
         $expected = 'Goodbye cruel world!';
-        $throwable = new \Exception($expected, 500);
+        $throwable = new Exception($expected, 500);
         $fallback = new Fallback($throwable);
         ob_start();
         $fallback->failGracefully();

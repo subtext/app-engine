@@ -10,8 +10,22 @@ services:
       VIRTUAL_ADMIN: alonzo.turner@subtextproductions.com
       PHP_IDE_CONFIG: serverName=AppEngine
       APP_CONFIG: unit.php
+      DB_USER: root
+      DB_PASS: password
+      DB_NAME: engine-db
+      DB_HOST: mysql
     volumes:
     - ./:/var/www
     ports:
     - 80:80
     - 443:443
+  mysql:
+    image: mariadb:latest
+    container_name: mysql-engine
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: engine-db
+    volumes:
+      - "./db/data:/var/lib/mysql"
+    ports:
+      - 3306:3306

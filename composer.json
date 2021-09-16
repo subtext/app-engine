@@ -16,7 +16,8 @@
         "php-di/php-di": "^6.0",
         "symfony/routing": "^5.0",
         "monolog/monolog": "^2.2",
-        "psr/log": "^1.1"
+        "psr/log": "^1.1",
+        "ext-pdo": "*"
     },
     "autoload": {
         "psr-4": {
@@ -27,6 +28,8 @@
         "phpunit/phpunit": "^9.5",
         "friendsofphp/php-cs-fixer": "^2.14",
         "vlucas/phpdotenv": "^3.4",
-        "rexxars/html-validator": "^2.2"
+        "rexxars/html-validator": "^2.2",
+        "robmorgan/phinx": "^0.12.8",
+        "fakerphp/faker": "^1.16"
     }
 }

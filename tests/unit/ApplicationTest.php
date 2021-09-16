@@ -2,6 +2,7 @@
 namespace Subtext\AppEngine;
 
 use DI\Container;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Subtext\AppEngine\Base\Controller;
@@ -75,7 +76,7 @@ class ApplicationTest extends TestCase
             $app->execute();
         }catch (Throwable $e) {
             $this->assertInstanceOf(RuntimeException::class, $e);
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e->getPrevious());
+            $this->assertInstanceOf(InvalidArgumentException::class, $e->getPrevious());
         }
     }
 
