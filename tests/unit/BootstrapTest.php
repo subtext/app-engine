@@ -2,6 +2,7 @@
 namespace Subtext\AppEngine;
 
 use Exception;
+use http\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -19,6 +20,7 @@ class BootstrapTest extends TestCase
      * @throws Exception
      * @covers ::__construct
      * @covers ::getContainer
+     * @covers ::resolveProjectLocation
      */
     public function testGetContainer()
     {
@@ -33,6 +35,7 @@ class BootstrapTest extends TestCase
      * @covers ::__construct
      * @covers ::getContainer
      * @covers ::getApplication
+     * @covers ::resolveProjectLocation
      * @covers \Subtext\AppEngine\Application::__construct
      */
     public function testGetApplication()
@@ -40,6 +43,8 @@ class BootstrapTest extends TestCase
         $rootPath = dirname(__DIR__, 2);
         $bootstrap = new Bootstrap($rootPath);
         $app = $bootstrap->getApplication();
+        $this->expectException(\InvalidArgumentException::class);
+        $bootstrap = new Bootstrap('');
         $this->assertInstanceOf(Application::class, $app);
     }
 }

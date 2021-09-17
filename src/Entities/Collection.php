@@ -21,10 +21,15 @@ abstract class Collection extends \ArrayObject
         $sql = $className::getInsertQuery();
         if (empty($id = $this->db->getIdForInsert($sql, $data))) {
             $errors = $this->db->getErrors();
+            if (!empty($errors)) {
+                $previous = $errors[0];
+            } else {
+                $previous = null;
+            }
             throw new \RuntimeException(
                 "Entity could not be saved to the database",
                 500,
-                $errors[0]
+                $previous
             );
         }
 
@@ -51,17 +56,19 @@ abstract class Collection extends \ArrayObject
         $data = $entity->getData();
         $sql = $className::getUpdateQuery($data);
         $id = $entity->getId();
-        if ($this->offsetExists($id)) {
+        if (!$this->offsetExists($id)) {
             $this->offsetSet($id, $entity);
         }
         $result = $this->db->getRowsAffectedForUpdate($sql, $data);
         if ($result === 0) {
             if (!empty($errors = $this->db->getErrors())) {
                 array_push($this->errors, ...$errors);
+            } else {
+                $result = true;
             }
         }
 
-        return $result;
+        return boolval($result);
     }
 
     public function deleteEntity(int $id): bool
@@ -71,6 +78,10 @@ abstract class Collection extends \ArrayObject
         if (!$result = $this->db->execute($sql, [':id' => $id])) {
             $errors = $this->db->getErrors();
             array_push($this->errors, ...$errors);
+        } else {
+            if ($this->offsetExists($id)) {
+                unset($this[$id]);
+            }
         }
 
         return $result;

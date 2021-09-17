@@ -25,6 +25,7 @@ class ApplicationTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::execute
+     * @covers ::validateRequestUri
      */
     public function testExecute(): void
     {
@@ -44,7 +45,7 @@ class ApplicationTest extends TestCase
             ->with('UnitController')
             ->willReturn($controller);
         $request = $this->createMock(Request::class);
-        $request->expects($this->once())
+        $request->expects($this->atLeastOnce())
             ->method('getUri')
             ->willReturn('https://example.com');
         $router = $this->createMock(Router::class);
@@ -62,12 +63,13 @@ class ApplicationTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::execute
+     * @covers ::validateRequestUri
      */
     public function testExecuteWillThrowTrailingSlashException(): void
     {
         $container = $this->createMock(Container::class);
         $request = $this->createMock(Request::class);
-        $request->expects($this->once())
+        $request->expects($this->atLeastOnce())
             ->method('getUri')
             ->willReturn('https://example.com/');
         $router = $this->createMock(Router::class);
@@ -83,6 +85,7 @@ class ApplicationTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::execute
+     * @covers ::validateRequestUri
      */
     public function testExecuteWillThrowMissingControllerException(): void
     {
@@ -92,7 +95,7 @@ class ApplicationTest extends TestCase
             ->with('UnitController')
             ->willReturn(false);
         $request = $this->createMock(Request::class);
-        $request->expects($this->once())
+        $request->expects($this->atLeastOnce())
             ->method('getUri')
             ->willReturn('https://example.com');
         $router = $this->createMock(Router::class);

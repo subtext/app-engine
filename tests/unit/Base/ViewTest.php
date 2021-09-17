@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 class ViewTest extends TestCase
 {
     /**
-     * @covers ::__construct
      * @covers ::display
      */
     public function testThatDisplayReturnsAResponse(): void
