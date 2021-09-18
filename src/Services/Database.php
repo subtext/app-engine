@@ -2,9 +2,11 @@
 
 namespace Subtext\AppEngine\Services;
 
+use InvalidArgumentException;
 use PDO;
 use PDOException;
 use PDOStatement;
+use RuntimeException;
 use stdClass;
 use Subtext\AppEngine\Entities\Entity;
 use Throwable;
@@ -27,14 +29,12 @@ class Database
     private array $errors = [];
 
     /**
-     * @var Database
+     * @var ?Database
      */
     private static ?Database $instance;
 
     /**
-     * @param string $dsn
-     * @param string $user
-     * @param string $pass
+     * @param PDO $pdo
      */
     private function __construct(PDO $pdo)
     {
@@ -61,7 +61,7 @@ class Database
     {
         if (empty(self::$instance)) {
             if (empty($pdo)) {
-                throw new \RuntimeException(
+                throw new RuntimeException(
                     "The PDO object must be set on the first instantiation",
                     500,
                 );
@@ -110,7 +110,7 @@ class Database
     {
         $id = 0;
         if (strpos(trim($sql), 'INSERT') !== 0) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "SQL statement must begin with INSERT"
             );
         }
@@ -130,7 +130,7 @@ class Database
     {
         $num = 0;
         if (strpos(trim($sql), 'UPDATE') !== 0) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 "SQL statement must begin with UPDATE"
             );
         }
@@ -213,6 +213,8 @@ class Database
             }
         } catch (PDOException $e) {
             $success = false;
+            $this->handleError($e);
+        } catch (Throwable $e) {
             $this->handleError($e);
         } finally { // @codeCoverageIgnore
             return $success;

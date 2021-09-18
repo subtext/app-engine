@@ -36,8 +36,6 @@ final class Application
     private $router;
 
     /**
-     * Application constructor
-     *
      * @param ContainerInterface $container
      * @param Request            $request
      * @param Router             $router
@@ -81,7 +79,7 @@ final class Application
         $uri = $this->request->getUri();
         $ruri = $this->request->getRequestUri();
         if ($uri === 'http://localhost/') {
-            // do nothing
+            // @todo: implement a better pattern for whitelisted urls
         } elseif (mb_substr($this->request->getUri(), -1) === '/') {
             throw new InvalidArgumentException(
                 "The request uri contains a trailing slash. Please remove this at the web server level"

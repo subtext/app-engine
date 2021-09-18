@@ -3,10 +3,9 @@
 namespace Subtext\AppEngine\Base;
 
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment;
 
 /**
- * Class View
+ * View
  *
  * @package Subtext\AppEngine\Base
  * @copyright Subtext Productions 2007-2021 All rights reserved

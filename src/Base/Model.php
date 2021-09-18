@@ -10,7 +10,7 @@ namespace Subtext\AppEngine\Base;
 use Subtext\AppEngine\Services\Database;
 
 /**
- * Class Model
+ * Model
  *
  * @package Subtext\AppEngine\Base
  * @copyright Subtext Productions 2007-2021 All rights reserved
@@ -18,7 +18,7 @@ use Subtext\AppEngine\Services\Database;
  */
 abstract class Model
 {
-    protected $db;
+    protected Database $db;
 
     public function __construct(Database $db)
     {

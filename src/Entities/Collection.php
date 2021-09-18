@@ -2,12 +2,21 @@
 
 namespace Subtext\AppEngine\Entities;
 
+use ArrayObject;
+use RuntimeException;
 use Subtext\AppEngine\Services\Database;
 
-abstract class Collection extends \ArrayObject
+/**
+ * Collection
+ *
+ * @package Subtext\AppEngine\Entities
+ * @copyright Subtext Productions 2007-2021 All rights reserved
+ * @license MIT
+ */
+abstract class Collection extends ArrayObject
 {
-    private $db;
-    private $errors = [];
+    private Database $db;
+    private array $errors = [];
 
     public function __construct(Database $db)
     {
@@ -15,6 +24,13 @@ abstract class Collection extends \ArrayObject
         $this->db = $db;
     }
 
+    /**
+     * Create (CRUD) an entity and persist it in the database. The entity is
+     * added to the collection.
+     *
+     * @param array $data
+     * @return Entity
+     */
     public function createEntity(array $data): Entity
     {
         $className = $this->getClassName();
@@ -26,7 +42,7 @@ abstract class Collection extends \ArrayObject
             } else {
                 $previous = null;
             }
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 "Entity could not be saved to the database",
                 500,
                 $previous
@@ -36,6 +52,13 @@ abstract class Collection extends \ArrayObject
         return $this->getEntity($id);
     }
 
+    /**
+     * Read (CRUD) an entity's data from the database and add it to the
+     * collection or update an existing entity.
+     *
+     * @param int $id
+     * @return Entity
+     */
     public function getEntity(int $id): Entity
     {
         if (!$this->offsetExists($id)) {
@@ -50,6 +73,12 @@ abstract class Collection extends \ArrayObject
         return $this->offsetGet($id);
     }
 
+    /**
+     * Update (CRUD) persist any changes in an entity back to the database.
+     *
+     * @param Entity $entity
+     * @return bool
+     */
     public function saveEntity(Entity $entity): bool
     {
         $className = $this->getClassName();
@@ -71,6 +100,12 @@ abstract class Collection extends \ArrayObject
         return boolval($result);
     }
 
+    /**
+     * Delete (CRUD) an entity from the database and remove it from the collection.
+     *
+     * @param int $id
+     * @return bool
+     */
     public function deleteEntity(int $id): bool
     {
         $className = $this->getClassName();
@@ -87,10 +122,21 @@ abstract class Collection extends \ArrayObject
         return $result;
     }
 
+    /**
+     * Get an array of all errors that have occurred.
+     *
+     * @return array
+     */
     public function getErrors(): array
     {
         return $this->errors;
     }
 
+    /**
+     * A method which returns the class name of an Entity to which the
+     * collection is bound.
+     *
+     * @return string
+     */
     abstract protected function getClassName(): string;
 }
