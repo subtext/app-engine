@@ -49,11 +49,17 @@ return [
     ),
     Database::class => factory(
         function (ContainerInterface $c) {
-            return Database::getInstance(
-                $c->get('db.dsn'),
-                $c->get('db.user'),
-                $c->get('db.pass')
-            );
+            if (!Database::hasPDO()) {
+                $pdo = new PDO(
+                    $c->get('db.dsn'),
+                    $c->get('db.user'),
+                    $c->get('db.pass')
+                );
+            } else {
+                $pdo = null;
+            }
+
+            return Database::getInstance($pdo);
         }
     ),
 ];

@@ -29,22 +29,44 @@ class Database
     /**
      * @var Database
      */
-    private static Database $instance;
+    private static ?Database $instance;
 
     /**
      * @param string $dsn
      * @param string $user
      * @param string $pass
      */
-    private function __construct(string $dsn, string $user, string $pass)
+    private function __construct(PDO $pdo)
     {
-        $this->pdo = new PDO($dsn, $user, $pass);
+        $this->pdo = $pdo;
     }
 
-    public static function getInstance(string $dsn, string $user, string $pass): Database
+    public static function hasPDO(): bool
+    {
+        return !empty(self::$instance);
+    }
+
+    public static function resetInstance(): bool
+    {
+        $value = false;
+        if (self::hasPDO()) {
+            self::$instance = null;
+            $value = true;
+        }
+
+        return $value;
+    }
+
+    public static function getInstance(?PDO $pdo = null): Database
     {
         if (empty(self::$instance)) {
-            self::$instance = new self($dsn, $user, $pass);
+            if (empty($pdo)) {
+                throw new \RuntimeException(
+                    "The PDO object must be set on the first instantiation",
+                    500,
+                );
+            }
+            self::$instance = new self($pdo);
         }
 
         return self::$instance;
@@ -74,17 +96,15 @@ class Database
     {
         try {
             $stmt = $this->getPreparedStatement($sql);
-            if (!$this->executeStatement($stmt, $data)) {
-                $this->handleError(null);
-            } else {
+            if ($this->executeStatement($stmt, $data)) {
                 $class = $stmt->fetchObject($entityClassname);
             }
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
             $this->handleError($e);
-        } finally {
+        } finally { // @codeCoverageIgnore
             return $class;
         }
-    }
+    } // @codeCoverageIgnore
 
     public function getIdForInsert(string $sql, array $data = []): int
     {
@@ -99,8 +119,8 @@ class Database
             if ($this->executeStatement($stmt, $data)) {
                 $id = intval($this->pdo->lastInsertId());
             }
-        } catch (PDOException $e) {
-            array_push($this->errors, $e);
+        } catch (Throwable $e) {
+            $this->handleError($e);
         }
 
         return $id;
@@ -119,8 +139,8 @@ class Database
             if ($this->executeStatement($stmt, $data)) {
                 $num = $stmt->rowCount();
             }
-        } catch (PDOException $e) {
-            array_push($this->errors, $e);
+        } catch (Throwable $e) {
+            $this->handleError($e);
         }
 
         return $num;
@@ -131,13 +151,13 @@ class Database
         try {
             $stmt = $this->getPreparedStatement($sql);
             $result = $this->executeStatement($stmt, $data);
-        } catch (PDOException $e) {
+        } catch (Throwable $e) {
             $result = false;
-            array_push($this->errors, $e);
-        } finally {
+            $this->handleError($e);
+        } finally { // @codeCoverageIgnore
             return $result;
         }
-    }
+    } // @codeCoverageIgnore
 
     public function getErrors(): array
     {
@@ -157,13 +177,13 @@ class Database
                     $result = $stmt->fetch($style);
                 }
             }
-        } catch (PDOException $e) {
-            array_push($this->errors, $e);
+        } catch (Throwable $e) {
             $result = null;
-        } finally {
+            $this->handleError($e);
+        } finally { // @codeCoverageIgnore
             return $result;
         }
-    }
+    } // @codeCoverageIgnore
 
     private function getPreparedStatement(string $sql): PDOStatement
     {
@@ -193,21 +213,14 @@ class Database
             }
         } catch (PDOException $e) {
             $success = false;
-            array_push($this->errors, $e);
-        } finally {
+            $this->handleError($e);
+        } finally { // @codeCoverageIgnore
             return $success;
         }
-    }
+    } // @codeCoverageIgnore
 
-    private function handleError(?Throwable $e): void
+    private function handleError(Throwable $e): void
     {
-        if (is_null($e)) {
-            // check for database errors
-        } else {
-            $e->getMessage();
-            $e->getCode();
-            $e->getLine();
-            $e->getFile();
-        }
+        array_push($this->errors, $e);
     }
 }

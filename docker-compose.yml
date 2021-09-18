@@ -9,7 +9,7 @@ services:
       VIRTUAL_HOST: app-engine.subtext
       VIRTUAL_ADMIN: alonzo.turner@subtextproductions.com
       PHP_IDE_CONFIG: serverName=AppEngine
-      APP_CONFIG: unit.php
+      APP_CONFIG: acceptance.php
       DB_USER: root
       DB_PASS: password
       DB_NAME: engine-db
