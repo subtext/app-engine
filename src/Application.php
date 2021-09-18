@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\NoConfigurationException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Router;
 use Throwable;
@@ -62,6 +63,12 @@ final class Application
             $controller = $this->container->get($params['_controller']);
             $response = $controller->execute();
             $response->send();
+        } catch (NoConfigurationException $e) {
+            throw new RuntimeException(
+                "You need to add records to config/routes.php",
+                500,
+                $e
+            );
         } catch (Throwable $e) {
             throw new RuntimeException("Oops... there was a problem", 404, $e);
         }
