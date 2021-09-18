@@ -2,7 +2,7 @@
 namespace Subtext\AppEngine;
 
 use Exception;
-use http\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -46,5 +46,16 @@ class BootstrapTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $bootstrap = new Bootstrap('');
         $this->assertInstanceOf(Application::class, $app);
+    }
+
+    /**
+     * @covers ::__construct
+     * @covers ::resolveProjectLocation
+     */
+    public function testWillThrowExceptionForBadPath(): void
+    {
+        $roothPath = __DIR__;
+        $this->expectException(InvalidArgumentException::class);
+        new Bootstrap($roothPath);
     }
 }

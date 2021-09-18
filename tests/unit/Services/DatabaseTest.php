@@ -511,4 +511,34 @@ class DatabaseTest extends TestCase
         $this->assertFalse($unit->execute($sql, []));
         $this->assertNotEmpty($unit->getErrors());
     }
+
+    /**
+     * @covers ::__construct
+     * @covers ::execute
+     * @covers ::executeStatement
+     * @covers ::getErrors
+     * @covers ::getInstance
+     * @covers ::getPreparedStatement
+     * @covers ::handleError
+     * @covers ::hasPDO
+     * @covers ::resetInstance
+     */
+    public function testWillThrowExceptionForStatementErrorInfo(): void
+    {
+        $stmt = $this->createMock(PDOStatement::class);
+        $stmt->expects($this->once())
+            ->method('execute')
+            ->willReturn(false);
+        $stmt->expects($this->once())
+            ->method('errorInfo')
+            ->willReturn(['mysql error code', 500, 'Error message']);
+        $pdo = $this->createMock(PDO::class);
+        $pdo->expects($this->once())
+            ->method('prepare')
+            ->willReturn($stmt);
+        Database::resetInstance();
+        $unit = Database::getInstance($pdo);
+        $this->assertFalse($unit->execute('', []));
+        $this->assertNotEmpty($unit->getErrors());
+    }
 }
