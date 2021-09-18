@@ -1,0 +1,35 @@
+<?php
+declare(strict_types=1);
+$namespaceDefinition
+use $useClassName;
+
+final class $className extends $baseClassName
+{
+    private cont string TABLE = 'table_name';
+
+    public function up(): void
+    {
+        if (!$this->hasTable(self::TABLE)) {
+            $this->table(self::TABLE, [
+                'id' => 'table_id',
+                'signed' => false,
+                'engine' => 'InnoDB'
+            ])->addColumn(
+                'table_name',
+                'string',
+                [
+                    'limit' => 64,
+                    'null' => true,
+                    'default' => null,
+                ]
+            )->create();
+        }
+    }
+
+    public function down(): void
+    {
+        if ($this->hasTable(self::TABLE)) {
+            $this->table(self::TABLE)->drop()->save();
+        }
+    }
+}

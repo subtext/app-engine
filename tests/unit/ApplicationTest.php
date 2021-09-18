@@ -2,6 +2,7 @@
 namespace Subtext\AppEngine;
 
 use DI\Container;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Subtext\AppEngine\Base\Controller;
@@ -24,6 +25,7 @@ class ApplicationTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::execute
+     * @covers ::validateRequestUri
      */
     public function testExecute(): void
     {
@@ -43,7 +45,7 @@ class ApplicationTest extends TestCase
             ->with('UnitController')
             ->willReturn($controller);
         $request = $this->createMock(Request::class);
-        $request->expects($this->once())
+        $request->expects($this->atLeastOnce())
             ->method('getUri')
             ->willReturn('https://example.com');
         $router = $this->createMock(Router::class);
@@ -61,12 +63,13 @@ class ApplicationTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::execute
+     * @covers ::validateRequestUri
      */
     public function testExecuteWillThrowTrailingSlashException(): void
     {
         $container = $this->createMock(Container::class);
         $request = $this->createMock(Request::class);
-        $request->expects($this->once())
+        $request->expects($this->atLeastOnce())
             ->method('getUri')
             ->willReturn('https://example.com/');
         $router = $this->createMock(Router::class);
@@ -75,13 +78,14 @@ class ApplicationTest extends TestCase
             $app->execute();
         }catch (Throwable $e) {
             $this->assertInstanceOf(RuntimeException::class, $e);
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e->getPrevious());
+            $this->assertInstanceOf(InvalidArgumentException::class, $e->getPrevious());
         }
     }
 
     /**
      * @covers ::__construct
      * @covers ::execute
+     * @covers ::validateRequestUri
      */
     public function testExecuteWillThrowMissingControllerException(): void
     {
@@ -91,7 +95,7 @@ class ApplicationTest extends TestCase
             ->with('UnitController')
             ->willReturn(false);
         $request = $this->createMock(Request::class);
-        $request->expects($this->once())
+        $request->expects($this->atLeastOnce())
             ->method('getUri')
             ->willReturn('https://example.com');
         $router = $this->createMock(Router::class);

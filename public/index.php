@@ -7,13 +7,15 @@
 
 namespace Subtext\AppEngine;
 
+use Throwable;
+
 try {
     $path = dirname(__DIR__);
     require_once($path . '/vendor/autoload.php');
     $bootstrap = new Bootstrap($path);
     $app = $bootstrap->getApplication();
     $app->execute();
-} catch (\Throwable $e) {
+} catch (Throwable $e) {
     $error = new Fallback($e);
     $error->failGracefully();
     $app->close();

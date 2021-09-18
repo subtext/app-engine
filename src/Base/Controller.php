@@ -5,7 +5,7 @@ namespace Subtext\AppEngine\Base;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class Controller
+ * Controller
  *
  * @package Subtext\AppEngine\Base
  * @copyright Subtext Productions 2007-2021 All rights reserved
@@ -16,12 +16,18 @@ abstract class Controller
     /**
      * @var Model
      */
-    protected $model;
+    protected Model $model;
 
     /**
      * @var View
      */
-    protected $view;
+    protected View $view;
+
+    public function __construct(Model $model, View $view)
+    {
+        $this->model = $model;
+        $this->view = $view;
+    }
 
     /**
      * Create a method which will handle all the necessary tasks for this controller

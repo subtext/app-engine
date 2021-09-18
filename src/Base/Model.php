@@ -7,10 +7,10 @@
 
 namespace Subtext\AppEngine\Base;
 
-use Aws\SecretsManager\SecretsManagerClient;
+use Subtext\AppEngine\Services\Database;
 
 /**
- * Class Model
+ * Model
  *
  * @package Subtext\AppEngine\Base
  * @copyright Subtext Productions 2007-2021 All rights reserved
@@ -18,5 +18,12 @@ use Aws\SecretsManager\SecretsManagerClient;
  */
 abstract class Model
 {
+    protected Database $db;
+
+    public function __construct(Database $db)
+    {
+        $this->db = $db;
+    }
+
     abstract public function getData(): array;
 }

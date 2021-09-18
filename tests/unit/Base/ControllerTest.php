@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ControllerTest extends TestCase
 {
     /**
+     * @covers ::__construct
      * @covers ::execute
      */
     public function testCanExecute(): void
@@ -22,13 +23,9 @@ class ControllerTest extends TestCase
         $model = $this->createMock(Model::class);
         $model->expects($this->once())->method('getData')->willReturn([]);
         $view = $this->createMock(View::class);
+
         $view->expects($this->once())->method('display')->with([])->willReturn($response);
-        $unit = new class($model, $view) extends Controller {
-            public function __construct($m, $v) {
-                $this->model = $m;
-                $this->view = $v;
-            }
-        };
+        $unit = new class($model, $view) extends Controller {};
         $actual = $unit->execute();
         $this->assertEquals($expected, $actual->getContent());
     }
