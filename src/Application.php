@@ -63,12 +63,6 @@ final class Application
             $controller = $this->container->get($params['_controller']);
             $response = $controller->execute();
             $response->send();
-        } catch (NoConfigurationException $e) {
-            throw new RuntimeException(
-                "You need to add records to config/routes.php",
-                500,
-                $e
-            );
         } catch (Throwable $e) {
             throw new RuntimeException("Oops... there was a problem", 404, $e);
         }
