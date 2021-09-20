@@ -3,7 +3,6 @@
     "description": "Common code for bootstrapping a PHP web application",
     "type": "library",
     "license": "MIT",
-    "version": "0.0.1",
     "authors": [
         {
             "name": "Alonzo C Turner",
