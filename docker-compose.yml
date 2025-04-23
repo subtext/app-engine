@@ -3,7 +3,7 @@ name: app_engine
 services:
   php:
     image: alonzoturner/lamp-stack:latest
-    container_name: php_apache
+    container_name: app_engine_php_apache
     environment:
       VIRTUAL_DIR: public
       VIRTUAL_HOST: app-engine.subtext
@@ -20,7 +20,7 @@ services:
     - 80:80
   mysql:
     image: mysql:8
-    container_name: mysql
+    container_name: app_engine_mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: demo
