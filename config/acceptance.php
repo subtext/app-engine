@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Router;
 use function DI\factory;
 
 return [
-    'db.dsn' => 'mysql:dbname=engine-db;host=mysql',
+    'db.dsn' => 'mysql:dbname=demo;host=mysql',
     'db.user' => 'root',
     'db.pass' => 'password',
     ContainerInterface::class => DI\factory(
