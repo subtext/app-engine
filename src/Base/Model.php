@@ -13,10 +13,10 @@ use Subtext\AppEngine\Services\Database;
  * Model
  *
  * @package Subtext\AppEngine\Base
- * @copyright Subtext Productions 2007-2021 All rights reserved
+ * @copyright Subtext Productions 2007-2025 All rights reserved
  * @license MIT
  */
-abstract class Model
+class Model
 {
     protected Database $db;
 
@@ -24,6 +24,4 @@ abstract class Model
     {
         $this->db = $db;
     }
-
-    abstract public function getData(): array;
 }

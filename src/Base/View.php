@@ -17,5 +17,5 @@ abstract class View
      * @param array $data
      * @return Response
      */
-    abstract public function display(array $data): Response;
+    abstract public function display(mixed $data): Response;
 }

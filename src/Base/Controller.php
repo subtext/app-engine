@@ -14,29 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class Controller
 {
     /**
-     * @var Model
-     */
-    protected Model $model;
-
-    /**
-     * @var View
-     */
-    protected View $view;
-
-    public function __construct(Model $model, View $view)
-    {
-        $this->model = $model;
-        $this->view = $view;
-    }
-
-    /**
      * Create a method which will handle all the necessary tasks for this controller
      *
      * @return Response
      */
-    public function execute(): Response
-    {
-        $data = $this->model->getData();
-        return $this->view->display($data);
-    }
+    abstract function execute(array $params): Response;
 }
