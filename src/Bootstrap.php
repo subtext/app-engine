@@ -3,7 +3,6 @@
 namespace Subtext\AppEngine;
 
 use DI\ContainerBuilder;
-use Exception;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
@@ -17,24 +16,44 @@ use Psr\Container\ContainerInterface;
 class Bootstrap
 {
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface | null
      */
-    private $container;
+    public ?ContainerInterface $container = null {
+        get {
+            if (!$this->container instanceof ContainerInterface) {
+                $configFile = getenv('APP_CONFIG') ?: 'production.php';
+                $configPath = "$this->configPath/$configFile";
+                $builder = new ContainerBuilder();
+                $builder->addDefinitions($configPath);
+                $this->container = $builder->build();
+            }
+
+            return $this->container;
+        }
+    }
 
     /**
-     * @var Application
+     * @var Application | null
      */
-    private $application;
+    public ?Application $application = null {
+        get {
+            if (!$this->application instanceof Application) {
+                $this->application = $this->container?->get(Application::class);
+            }
+
+            return $this->application;
+        }
+    }
 
     /**
      * @var string The root path to the project
      */
-    private $rootPath;
+    private string $rootPath;
 
     /**
      * @var string The path to di configs and site routes
      */
-    private $configPath;
+    private string $configPath;
 
     /**
      * Bootstrap constructor
@@ -43,38 +62,8 @@ class Bootstrap
      */
     public function __construct(string $path)
     {
-        $this->rootPath = $this->resolveProjectLocation($path);
+        $this->rootPath   = $this->resolveProjectLocation($path);
         $this->configPath = "$this->rootPath/config";
-    }
-
-    /**
-     * @return ContainerInterface
-     * @throws Exception
-     */
-    public function getContainer(): ContainerInterface
-    {
-        if (!$this->container instanceof ContainerInterface) {
-            $configFile = getenv('APP_CONFIG') ? getenv('APP_CONFIG') : 'production.php';
-            $configPath = "$this->configPath/$configFile";
-            $builder = new ContainerBuilder();
-            $builder->addDefinitions($configPath);
-            $this->container = $builder->build();
-        }
-
-        return $this->container;
-    }
-
-    /**
-     * @return Application
-     * @throws Exception
-     */
-    public function getApplication(): Application
-    {
-        if (!$this->application instanceof Application) {
-            $this->application = $this->getContainer()->get(Application::class);
-        }
-
-        return $this->application;
     }
 
     /**
