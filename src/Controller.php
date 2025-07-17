@@ -1,6 +1,6 @@
 <?php
 
-namespace Subtext\AppEngine\Base;
+namespace Subtext\AppEngine;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,7 +16,8 @@ abstract class Controller
     /**
      * Create a method which will handle all the necessary tasks for this controller
      *
+     * @param mixed $params Data passed from the router
      * @return Response
      */
-    abstract function execute(array $params): Response;
+    abstract public function execute(mixed $params): Response;
 }
