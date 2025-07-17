@@ -1,11 +1,13 @@
 <?php
-namespace Subtext\AppEngine;
+namespace Subtext\AppEngine\Test\Unit;
 
 use DI\Container;
-use InvalidArgumentException;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Subtext\AppEngine\Base\Controller;
+use Subtext\AppEngine\Application;
+use Subtext\AppEngine\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Router;
@@ -26,6 +28,7 @@ class ApplicationTest extends TestCase
      * @covers ::__construct
      * @covers ::execute
      * @covers ::validateRequestUri
+     * @throws Exception
      */
     public function testExecute(): void
     {
@@ -44,16 +47,14 @@ class ApplicationTest extends TestCase
             ->method('get')
             ->with('UnitController')
             ->willReturn($controller);
+        $logger = $this->createMock(LoggerInterface::class);
         $request = $this->createMock(Request::class);
-        $request->expects($this->atLeastOnce())
-            ->method('getUri')
-            ->willReturn('https://example.com');
         $router = $this->createMock(Router::class);
         $router->expects($this->once())
             ->method('matchRequest')
             ->with($request)
             ->willReturn(['_controller' => 'UnitController']);
-        $app = new Application($container, $request, $router);
+        $app = new Application($container, $logger, $request, $router);
         ob_start();
         $app->execute();
         $actual = ob_get_clean();
@@ -64,28 +65,7 @@ class ApplicationTest extends TestCase
      * @covers ::__construct
      * @covers ::execute
      * @covers ::validateRequestUri
-     */
-    public function testExecuteWillThrowTrailingSlashException(): void
-    {
-        $container = $this->createMock(Container::class);
-        $request = $this->createMock(Request::class);
-        $request->expects($this->atLeastOnce())
-            ->method('getUri')
-            ->willReturn('https://example.com/');
-        $router = $this->createMock(Router::class);
-        $app = new Application($container, $request, $router);
-        try {
-            $app->execute();
-        }catch (Throwable $e) {
-            $this->assertInstanceOf(RuntimeException::class, $e);
-            $this->assertInstanceOf(InvalidArgumentException::class, $e->getPrevious());
-        }
-    }
-
-    /**
-     * @covers ::__construct
-     * @covers ::execute
-     * @covers ::validateRequestUri
+     * @throws Exception
      */
     public function testExecuteWillThrowMissingControllerException(): void
     {
@@ -94,17 +74,15 @@ class ApplicationTest extends TestCase
             ->method('has')
             ->with('UnitController')
             ->willReturn(false);
+        $logger = $this->createMock(LoggerInterface::class);
         $request = $this->createMock(Request::class);
-        $request->expects($this->atLeastOnce())
-            ->method('getUri')
-            ->willReturn('https://example.com');
         $router = $this->createMock(Router::class);
         $router->expects($this->once())
             ->method('matchRequest')
             ->with($request)
             ->willReturn(['_controller' => 'UnitController']);
 
-        $app = new Application($container, $request, $router);
+        $app = new Application($container, $logger, $request, $router);
         try {
             $app->execute();
         }catch (Throwable $e) {

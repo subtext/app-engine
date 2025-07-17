@@ -6,9 +6,7 @@ use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Subtext\AppEngine\Base\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\NoConfigurationException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Router;
 use Throwable;
@@ -17,7 +15,7 @@ use Throwable;
  * Class Application
  *
  * @package Subtext\AppEngine
- * @copyright Subtext Productions 2007-2021 All rights reserved
+ * @copyright Subtext Productions 2007-2025 All rights reserved
  * @license MIT
  */
 final readonly class Application
@@ -50,19 +48,20 @@ final readonly class Application
     {
         try {
             $params = $this->router->matchRequest($this->request);
-            if (!$this->container->has($params['_controller'])) {
+            $name   = ($params['_controller'] ?? '');
+            if (!$this->container->has($name)) {
                 throw new ResourceNotFoundException(sprintf(
                     "Controller %s does not exist, or cannot be defined",
-                    $params['_controller']
+                    $name
                 ));
             }
-            ;
-            if (($controller = $this->container->get($params['_controller'])) instanceof Controller) {
+            if (($controller = $this->container->get($name)) instanceof Controller) {
                 $controller->execute($params)->send();
             } else {
                 throw new InvalidArgumentException(sprintf(
-                    "Controller %s is not an instance of Base\Controller",
-                    $controller::class
+                    'Controller %s is not an instance of %s',
+                    $controller::class,
+                    Controller::class
                 ));
             }
         } catch (Throwable $e) {
