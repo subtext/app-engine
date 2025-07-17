@@ -3,6 +3,7 @@ namespace Subtext\AppEngine;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 /**
  * Class FallbackTest
@@ -20,7 +21,12 @@ class FallbackTest extends TestCase
     {
         $expected = 'Goodbye cruel world!';
         $throwable = new Exception($expected, 500);
-        $fallback = new Fallback($throwable);
+        $fallback = new class ($throwable) extends Fallback {
+            protected function getOutput(Throwable $error): string
+            {
+                return $error->getMessage();
+            }
+        };
         ob_start();
         $fallback->failGracefully();
         $actual = ob_get_clean();
