@@ -5,6 +5,7 @@ namespace Subtext\AppEngine;
 use DI\ContainerBuilder;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
+use Subtext\AppEngine\Exceptions\ConfigNotFoundException;
 
 /**
  * Class Bootstrap
@@ -21,10 +22,13 @@ class Bootstrap
     public ?ContainerInterface $container = null {
         get {
             if (!$this->container instanceof ContainerInterface) {
-                $configFile = getenv('APP_CONFIG') ?: 'production.php';
-                $configPath = "$this->configPath/$configFile";
+                if (!file_exists($this->configFile)) {
+                    throw new ConfigNotFoundException(
+                        sprintf("Config file: '%s' not found.", $this->configFile)
+                    );
+                }
                 $builder = new ContainerBuilder();
-                $builder->addDefinitions($configPath);
+                $builder->addDefinitions($this->configFile);
                 $this->container = $builder->build();
             }
 
@@ -51,19 +55,20 @@ class Bootstrap
     private string $rootPath;
 
     /**
-     * @var string The path to di configs and site routes
+     * @var string The path to di configuration settings file
      */
-    private string $configPath;
+    private string $configFile;
 
     /**
      * Bootstrap constructor
      *
-     * @param string $path
+     * @param string $path    Path to app root directory
+     * @param string $config  Path to di configuration file
      */
-    public function __construct(string $path)
+    public function __construct(string $path, string $config = 'default.php')
     {
         $this->rootPath   = $this->resolveProjectLocation($path);
-        $this->configPath = "$this->rootPath/config";
+        $this->configFile = "$this->rootPath/config/$config";
     }
 
     /**
