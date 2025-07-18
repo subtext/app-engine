@@ -1,0 +1,26 @@
+name: Run Unit Tests
+
+on:
+  pull_request:
+    types:
+      - "opened"
+      - "synchronize"
+    branches:
+      - master
+
+jobs:
+  phpunit:
+    name: PHP Unit Test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create PHP Environment
+        run: docker compose up -d
+
+      - name: Run Composer Install
+        run: docker exec app_engine_php_apache composer install
+
+      - name: Run Unit Tests
+        run: docker exec app_engine_php_apache vendor/bin/phpunit
