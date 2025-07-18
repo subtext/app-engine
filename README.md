@@ -1,6 +1,7 @@
 # Subtext App Engine
 
 ## A tiny framework for building PHP based web applications.
+![workflow](https://github.com/subtext/app-engine/actions/workflows/tests-unit.yml/badge.svg)
 
 ### Installation
 ```shell
