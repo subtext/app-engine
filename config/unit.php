@@ -11,37 +11,22 @@ use Monolog\Handler\FingersCrossedHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
-use Subtext\AppEngine\Controllers\Factory;
+use Subtext\AppEngine\Controller;
 use Subtext\AppEngine\Controllers\Loader;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Symfony\Component\Routing\Loader\PhpFileLoader;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\HttpFoundation\Response;
 
 use function DI\factory;
 
 return [
-    Factory::class => factory(function (ContainerInterface $c) {
-        return new Factory(function (string $class) use ($c) {
-            if (!$c->has($class)) {
-                throw new RouteNotFoundException();
-            }
-            return $c->get($class);
-        });
-    }),
-    Loader::class => factory(function (
-        Router $router,
-        Request $request,
-        Factory $factory
-    ) {
-        $params = Loader::resolveController($router, $request);
-        $controller = ($params['_controller'] ?? null);
-        if (!$controller) {
-            throw new RouteNotFoundException();
-        }
-        return Loader::create($factory->get($controller), $params);
+    Loader::class => factory(function () {
+        return Loader::create(
+            new class () extends Controller {
+                public function execute(mixed $params): Response
+                {
+                    return new Response('Hello World');
+                }
+            }, []
+        );
     }),
     LoggerInterface::class => factory(function(ContainerInterface $c) {
         $logger = new Logger('debug');
@@ -52,23 +37,4 @@ return [
 
         return $logger;
     }),
-    Request::class => factory([Request::class, 'createFromGlobals']),
-    RequestContext::class => factory(
-        function (ContainerInterface $c) {
-            $context = new RequestContext();
-            $context->fromRequest($c->get(Request::class));
-
-            return $context;
-        }
-    ),
-    Router::class => factory(
-        function (ContainerInterface $c) {
-            return new Router(
-                new PhpFileLoader(new FileLocator([dirname(__DIR__)])),
-                'config/routes.php',
-                [],
-                $c->get(RequestContext::class)
-            );
-        }
-    ),
 ];

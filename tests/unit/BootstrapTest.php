@@ -42,7 +42,7 @@ class BootstrapTest extends TestCase
     public function testGetApplication()
     {
         $rootPath = dirname(__DIR__, 2);
-        $bootstrap = new Bootstrap($rootPath);
+        $bootstrap = new Bootstrap($rootPath, 'unit.php');
         $app = $bootstrap->application;
         $this->assertInstanceOf(Application::class, $app);
     }
