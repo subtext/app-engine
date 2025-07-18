@@ -1,31 +1,16 @@
-version: '3.7'
+name: app_engine
 
 services:
   php:
-    image: alonzoturner/lamp-stack:framework
-    container_name: php-engine
+    image: alonzoturner/lamp-stack:latest
+    container_name: app_engine_php_apache
     environment:
       VIRTUAL_DIR: public
       VIRTUAL_HOST: app-engine.subtext
-      VIRTUAL_ADMIN: alonzo.turner@subtextproductions.com
+      VIRTUAL_ADMIN: alonzo.turner@subtext.productions
       PHP_IDE_CONFIG: serverName=AppEngine
-      APP_CONFIG: acceptance.php
-      DB_USER: root
-      DB_PASS: password
-      DB_NAME: engine-db
-      DB_HOST: mysql
+      APP_CONFIG: unit.php
     volumes:
     - ./:/var/www
     ports:
     - 80:80
-    - 443:443
-  mysql:
-    image: mariadb:latest
-    container_name: mysql-engine
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: engine-db
-    volumes:
-      - "./db/data:/var/lib/mysql"
-    ports:
-      - 3306:3306

@@ -5,6 +5,7 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
+use Subtext\AppEngine\Exceptions\ConfigNotFoundException;
 
 /**
  * Class BootstrapTest
@@ -26,7 +27,7 @@ class BootstrapTest extends TestCase
     {
         $rootPath = dirname(__DIR__, 2);
         $bootstrap = new Bootstrap($rootPath);
-        $container = $bootstrap->getContainer();
+        $container = $bootstrap->container;
         $this->assertInstanceOf(ContainerInterface::class, $container);
     }
 
@@ -42,9 +43,7 @@ class BootstrapTest extends TestCase
     {
         $rootPath = dirname(__DIR__, 2);
         $bootstrap = new Bootstrap($rootPath);
-        $app = $bootstrap->getApplication();
-        $this->expectException(\InvalidArgumentException::class);
-        $bootstrap = new Bootstrap('');
+        $app = $bootstrap->application;
         $this->assertInstanceOf(Application::class, $app);
     }
 
@@ -54,8 +53,20 @@ class BootstrapTest extends TestCase
      */
     public function testWillThrowExceptionForBadPath(): void
     {
-        $roothPath = __DIR__;
         $this->expectException(InvalidArgumentException::class);
-        new Bootstrap($roothPath);
+        new Bootstrap("foobar");
+    }
+
+    public function testWillThrowExceptionForUnresolvedConfigDirectory(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Bootstrap(__DIR__);
+    }
+
+    public function testWillThrowExceptionForMissingConfigFile(): void
+    {
+        $unit = new Bootstrap(dirname(__DIR__, 2), 'foobar.php');
+        $this->expectException(ConfigNotFoundException::class);
+        $unit->container;
     }
 }

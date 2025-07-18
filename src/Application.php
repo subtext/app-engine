@@ -2,66 +2,49 @@
 
 namespace Subtext\AppEngine;
 
-use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\NoConfigurationException;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Router;
+use Subtext\AppEngine\Controllers\Loader;
 use Throwable;
 
 /**
  * Class Application
  *
  * @package Subtext\AppEngine
- * @copyright Subtext Productions 2007-2021 All rights reserved
+ * @copyright Subtext Productions 2007-2025 All rights reserved
  * @license MIT
  */
-final class Application
+final readonly class Application
 {
     /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Router
-     */
-    private $router;
-
-    /**
-     * @param ContainerInterface $container
-     * @param Request            $request
-     * @param Router             $router
+     * @param Loader          $loader Dependency injected controller resolver
+     * @param LoggerInterface $logger Logging for graceful failures
      */
     public function __construct(
-        ContainerInterface $container,
-        Request $request,
-        Router $router
-    ) {
-        $this->container = $container;
-        $this->request = $request;
-        $this->router = $router;
-    }
+        private Loader          $loader,
+        private LoggerInterface $logger,
+    ) {}
 
+    /**
+     * Executes the main application logic using pre-configured resources
+     * provided by the dependency injection container. The container, built
+     * using definitions from config/default.php, includes initialized services
+     * and route mappings defined in config/routes.php. The execute() method
+     * delegates control to the appropriate controller based on the resolved
+     * route, coordinating the request lifecycle and invoking the correct
+     * business logic through the controller layer.
+     *
+     * @return void
+     */
     public function execute(): void
     {
         try {
-            $this->validateRequestUri();
-            $params = $this->router->matchRequest($this->request);
-            if (!$this->container->has($params['_controller'])) {
-                throw new ResourceNotFoundException("Controller does not exist");
-            }
-            $controller = $this->container->get($params['_controller']);
-            $response = $controller->execute();
-            $response->send();
+            $this->loader->getController()->execute(
+                $this->loader->getParams()
+            )->send();
         } catch (Throwable $e) {
+            $this->logger->debug($e->getMessage());
+            $this->logger->debug($e->getTraceAsString());
             throw new RuntimeException("Oops... there was a problem", 404, $e);
         }
     }
@@ -71,19 +54,6 @@ final class Application
      */
     public function close(): void
     {
-        // send any errors to logs
-    }
-
-    private function validateRequestUri(): void
-    {
-        $uri = $this->request->getUri();
-        $ruri = $this->request->getRequestUri();
-        if ($uri === 'http://localhost/') {
-            // @todo: implement a better pattern for whitelisted urls
-        } elseif (mb_substr($this->request->getUri(), -1) === '/') {
-            throw new InvalidArgumentException(
-                "The request uri contains a trailing slash. Please remove this at the web server level"
-            );
-        }
+        $this->logger->debug("application closed");
     }
 }
