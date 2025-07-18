@@ -8,7 +8,7 @@ use Subtext\AppEngine\Controller;
 
 class Factory
 {
-    public function __construct(private Closure $resolver)
+    public function __construct(private readonly Closure $resolver)
     {}
 
     public function get(string $class): Controller

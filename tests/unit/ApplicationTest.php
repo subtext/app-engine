@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Subtext\AppEngine\Application;
 use Subtext\AppEngine\Controller;
+use Subtext\AppEngine\Controllers\Loader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Router;
@@ -37,24 +38,17 @@ class ApplicationTest extends TestCase
         $controller = $this->createMock(Controller::class);
         $controller->expects($this->once())
             ->method('execute')
+            ->with([])
             ->willReturn($response);
-        $container = $this->createMock(Container::class);
-        $container->expects($this->once())
-            ->method('has')
-            ->with('UnitController')
-            ->willReturn(true);
-        $container->expects($this->once())
-            ->method('get')
-            ->with('UnitController')
+        $loader = $this->createMock(Loader::class);
+        $loader->expects($this->once())
+            ->method('getController')
             ->willReturn($controller);
+        $loader->expects($this->once())
+            ->method('getParams')
+            ->willReturn([]);
         $logger = $this->createMock(LoggerInterface::class);
-        $request = $this->createMock(Request::class);
-        $router = $this->createMock(Router::class);
-        $router->expects($this->once())
-            ->method('matchRequest')
-            ->with($request)
-            ->willReturn(['_controller' => 'UnitController']);
-        $app = new Application($container, $logger, $request, $router);
+        $app = new Application($loader, $logger);
         ob_start();
         $app->execute();
         $actual = ob_get_clean();
@@ -67,22 +61,14 @@ class ApplicationTest extends TestCase
      * @covers ::validateRequestUri
      * @throws Exception
      */
-    public function testExecuteWillThrowMissingControllerException(): void
+    public function testExecuteWillCatchAnyException(): void
     {
-        $container = $this->createMock(Container::class);
-        $container->expects($this->once())
-            ->method('has')
-            ->with('UnitController')
-            ->willReturn(false);
+        $loader = $this->createMock(Loader::class);
+        $loader->expects($this->once())
+            ->method('getController')
+            ->willThrowException(new ResourceNotFoundException());
         $logger = $this->createMock(LoggerInterface::class);
-        $request = $this->createMock(Request::class);
-        $router = $this->createMock(Router::class);
-        $router->expects($this->once())
-            ->method('matchRequest')
-            ->with($request)
-            ->willReturn(['_controller' => 'UnitController']);
-
-        $app = new Application($container, $logger, $request, $router);
+        $app = new Application($loader, $logger);
         try {
             $app->execute();
         }catch (Throwable $e) {
