@@ -2,13 +2,9 @@
 
 namespace Subtext\AppEngine;
 
-use InvalidArgumentException;
-use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Router;
+use Subtext\AppEngine\Controllers\Loader;
 use Throwable;
 
 /**
@@ -21,22 +17,18 @@ use Throwable;
 final readonly class Application
 {
     /**
-     * @param ContainerInterface $container Dependency injection container
-     * @param LoggerInterface    $logger    Logging for graceful failures
-     * @param Request            $request   HttpFoundation request
-     * @param Router             $router    HttpFoundation router
+     * @param Loader          $loader Dependency injected controller resolver
+     * @param LoggerInterface $logger Logging for graceful failures
      */
     public function __construct(
-        private ContainerInterface $container,
-        private LoggerInterface    $logger,
-        private Request            $request,
-        private Router             $router
+        private Loader          $loader,
+        private LoggerInterface $logger,
     ) {}
 
     /**
      * Executes the main application logic using pre-configured resources
      * provided by the dependency injection container. The container, built
-     * using definitions from config/build.php, includes initialized services
+     * using definitions from config/default.php, includes initialized services
      * and route mappings defined in config/routes.php. The execute() method
      * delegates control to the appropriate controller based on the resolved
      * route, coordinating the request lifecycle and invoking the correct
@@ -47,25 +39,12 @@ final readonly class Application
     public function execute(): void
     {
         try {
-            $params = $this->router->matchRequest($this->request);
-            $name   = ($params['_controller'] ?? '');
-            if (!$this->container->has($name)) {
-                throw new ResourceNotFoundException(sprintf(
-                    "Controller %s does not exist, or cannot be defined",
-                    $name
-                ));
-            }
-            if (($controller = $this->container->get($name)) instanceof Controller) {
-                $controller->execute($params)->send();
-            } else {
-                throw new InvalidArgumentException(sprintf(
-                    'Controller %s is not an instance of %s',
-                    $controller::class,
-                    Controller::class
-                ));
-            }
+            $this->loader->getController()->execute(
+                $this->loader->getParams()
+            )->send();
         } catch (Throwable $e) {
             $this->logger->debug($e->getMessage());
+            $this->logger->debug($e->getTraceAsString());
             throw new RuntimeException("Oops... there was a problem", 404, $e);
         }
     }
@@ -75,6 +54,6 @@ final readonly class Application
      */
     public function close(): void
     {
-        $this->logger->debug("Application closed");
+        $this->logger->debug("application closed");
     }
 }
